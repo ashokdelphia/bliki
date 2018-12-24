@@ -5,7 +5,7 @@ body {
 	line-height: 30px;
 }
 
-code {
+code, .codehilite pre {
 	font-family: 'Menlo', monospace;
 	font-size: 80%;
 }
