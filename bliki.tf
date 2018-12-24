@@ -67,7 +67,7 @@ resource "aws_acm_certificate" "bliki" {
 }
 
 resource "aws_route53_record" "bliki_validation" {
-  zone_id = "${data.terraform_remote_state.dns.zone_id}"
+  zone_id = "${data.terraform_remote_state.dns.grimoire_ca_zone_id}"
   ttl     = 60
   name    = "${aws_acm_certificate.bliki.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.bliki.domain_validation_options.0.resource_record_type}"
