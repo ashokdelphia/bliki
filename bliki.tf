@@ -79,8 +79,8 @@ resource "aws_route53_record" "bliki_validation" {
 resource "aws_cloudfront_distribution" "bliki" {
   provider = "aws.cloudfront"
 
-  enabled             = true
-  is_ipv6_enabled     = true
+  enabled         = true
+  is_ipv6_enabled = true
 
   aliases = ["grimoire.ca"]
 
@@ -140,10 +140,23 @@ resource "aws_cloudfront_distribution" "bliki" {
   }
 }
 
-resource "aws_route53_record" "bliki" {
+resource "aws_route53_record" "bliki_ip4" {
   zone_id = "${data.terraform_remote_state.dns.grimoire_ca_zone_id}"
   name    = ""
   type    = "A"
+
+  alias {
+    name    = "${aws_cloudfront_distribution.bliki.domain_name}"
+    zone_id = "${aws_cloudfront_distribution.bliki.hosted_zone_id}"
+
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "bliki_ip6" {
+  zone_id = "${data.terraform_remote_state.dns.grimoire_ca_zone_id}"
+  name    = ""
+  type    = "AAAA"
 
   alias {
     name    = "${aws_cloudfront_distribution.bliki.domain_name}"
