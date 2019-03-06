@@ -36,6 +36,10 @@ resource "aws_s3_bucket" "bliki" {
   website {
     index_document = "index.html"
   }
+
+  tags {
+    Project = "bliki"
+  }
 }
 
 resource "aws_s3_bucket_policy" "bliki" {
@@ -64,6 +68,10 @@ resource "aws_acm_certificate" "bliki" {
   domain_name = "grimoire.ca"
 
   validation_method = "DNS"
+
+  tags {
+    Project = "bliki"
+  }
 }
 
 resource "aws_route53_record" "bliki_validation" {
@@ -137,6 +145,10 @@ resource "aws_cloudfront_distribution" "bliki" {
     acm_certificate_arn      = "${aws_acm_certificate.bliki.arn}"
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"
+  }
+
+  tags {
+    Project = "bliki"
   }
 }
 
