@@ -7,6 +7,7 @@ This repository contains the infrastructure for publishing a website, built from
 You will need:
 
 * [MkDocs](https://mkdocs.org) (`brew install mkdocs`)
+* The AWS CLI (`brew install awscli`), logged in on an account with access to the `grimoire.ca` S3 bucket.
 
 ## Building
 
@@ -25,3 +26,11 @@ mkdocs serve
 ```
 
 This will automatically rebuild the site every time the files in `docs` change, and will serve them on a web server at <http://127.0.0.1:8000>.
+
+## Publishing
+
+Once the site is built, it can be published to s3:
+
+```bash
+aws s3 sync --delete site/ s3://grimoire.ca/
+```
