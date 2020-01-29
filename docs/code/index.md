@@ -8,4 +8,6 @@ Pieces of code and code-adjacent work, with or without exposition, that don't qu
 
 * [Writing Good Commit Messages](commit-messages.md) — A style guide.
 
+* [Some collected advice about Git](../git/index.md) — Not the source control tool we want, but definitely the source control tool we've got, and I think we should make the best of it.
+
 I also maintain a [Github account](https://github.com/ojacobson/) for more substantial projects.
