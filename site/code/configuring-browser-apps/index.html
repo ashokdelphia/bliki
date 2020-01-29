@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Configuring Browser Apps - The Grimoire</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Grimoire</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Owen Jacobson</a>
+                            </li>
+                            <li >
+                                <a href="../">Code</a>
+                            </li>
+                            <li >
+                                <a href="../../nomic/">Nomic</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/grimoire-ca/bliki/edit/master/docs/code/configuring-browser-apps.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#configuring-browser-apps">Configuring Browser Apps</a></li>
+            <li><a href="#why-bother">Why Bother</a></li>
+            <li><a href="#what-gets-configured">What Gets Configured</a></li>
+            <li><a href="#delivering-configuration">Delivering Configuration</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="configuring-browser-apps">Configuring Browser Apps<a class="headerlink" href="#configuring-browser-apps" title="Permanent link">&para;</a></h1>
+<p>I've found myself in he unexpected situation of having to write a lot of
+browser apps/single page apps this year. I have some thoughts on configuration.</p>
+<h2 id="why-bother">Why Bother<a class="headerlink" href="#why-bother" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Centralize environment-dependent facts to simplify management &amp; testing</li>
+<li>
+<p>Make it easy to manage app secrets.</p>
+<p><a href="https://twitter.com/wlonk">@wlonk</a> adds:</p>
+<blockquote>
+<p>“Secrets”? What this means in a browser app is a bit different.</p>
+</blockquote>
+<p>Which is unpleasantly true. In a freestanding browser app, a “secret” is only as secret as your users and their network connections choose to make it, i.e., not very secret at all. Maybe that should read “make it easy to manage app <em>tokens</em> and <em>identities</em>,” instead.</p>
+</li>
+<li>
+<p>Keep config data &amp; API tokens out of app's source control</p>
+</li>
+<li>Integration point for external config sources (Aerobatic, Heroku, etc)</li>
+<li>The forces described in <a href="http://12factor.net/dependencies">12 Factor App: Dependencies</a> and, to a lesser extent, <a href="http://12factor.net/config">12 Factor App: Configuration</a> apply just as well to web client apps as they do to freestanding services.</li>
+</ul>
+<h2 id="what-gets-configured">What Gets Configured<a class="headerlink" href="#what-gets-configured" title="Permanent link">&para;</a></h2>
+<p>Yes:</p>
+<ul>
+<li>Base URLs of backend services</li>
+<li>Tokens and client IDs for various APIs</li>
+</ul>
+<p>No:</p>
+<ul>
+<li>“Environments” (sorry, Ember folks - I know Ember thought this through carefully, but whole-env configs make it easy to miss settings in prod or test, and encourage patterns like “all devs use the same backends”)</li>
+</ul>
+<h2 id="delivering-configuration">Delivering Configuration<a class="headerlink" href="#delivering-configuration" title="Permanent link">&para;</a></h2>
+<p>There are a few ways to get configuration into the app.</p>
+<h3 id="globals">Globals<a class="headerlink" href="#globals" title="Permanent link">&para;</a></h3>
+<pre><code class="html">&lt;head&gt;
+    &lt;script&gt;window.appConfig = {
+        &quot;FOO_URL&quot;: &quot;https://foo.example.com/&quot;,
+        &quot;FOO_TOKEN&quot;: &quot;my-super-secret-token&quot;
+    };&lt;/script&gt;
+    &lt;script src=&quot;/your/app.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<ul>
+<li>Easy to consume: it's just globals, so <code>window.appConfig.foo</code> will read them.<ul>
+<li>This requires some discipline to use well.</li>
+</ul>
+</li>
+<li>Have to generate a script to set them.<ul>
+<li>This can be a <code>&lt;script&gt;window.appConfig = {some json}&lt;/script&gt;</code> tag or a standalone config script loaded with <code>&lt;script src="/config.js"&gt;</code></li>
+<li>Generating config scripts sets a minimum level of complexity for the deployment process: you either need a server to generate the script at request time, or a preprocessing step at deployment time.</li>
+<li>
+<p>It's code generation, which is easy to do badly. I had originally proposed using <code>JSON.stringify</code> to generate a Javascript object literal, but this fails for any config values with <code>&lt;/script&gt;</code> in them. That may be an unlikely edge case, but that only makes it a nastier trap for administrators.</p>
+<p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">There are more edge cases</a>. I strongly suspect that a hazard-free implementation requires a full-blown JS source generator. I had a look at building something out of <a href="https://github.com/estools/escodegen">escodegen</a> and <a href="https://github.com/estools/estemplate">estemplate</a>, but</p>
+<ol>
+<li>
+<p><code>escodegen</code>'s node version <a href="https://github.com/estools/escodegen/issues/298">doesn't generate browser-safe code</a>, so string literals with <code>&lt;/script&gt;</code> or <code>&lt;/head&gt;</code> in them still break the page, and</p>
+</li>
+<li>
+<p>converting javascript values into parse trees to feed to <code>estemplate</code> is some seriously tedious code.</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-attributes-and-link-elements">Data Attributes and Link Elements<a class="headerlink" href="#data-attributes-and-link-elements" title="Permanent link">&para;</a></h3>
+<pre><code class="html">&lt;head&gt;
+    &lt;link rel=&quot;foo-url&quot; href=&quot;https://foo.example.com/&quot;&gt;
+    &lt;script src=&quot;/your/app.js&quot; data-foo-token=&quot;my-super-secret-token&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<ul>
+<li>Flat values only. This is probably a good thing in the grand, since flat configurations are easier to reason about and much easier to document, but it makes namespacing trickier than it needs to be for groups of related config values (URL + token for a single service, for example).</li>
+<li>Have to generate the DOM to set them.<ul>
+<li>This is only practical given server-side templates or DOM rendering. You can't do this with bare nginx, unless you pre-generate pages at deployment time.</li>
+</ul>
+</li>
+</ul>
+<h3 id="config-api-endpoint">Config API Endpoint<a class="headerlink" href="#config-api-endpoint" title="Permanent link">&para;</a></h3>
+<pre><code class="js">fetch('/config') /* {&quot;FOO_URL&quot;: …, &quot;FOO_TOKEN&quot;: …} */
+    .then(response =&gt; response.json())
+    .then(json =&gt; someConfigurableService);
+</code></pre>
+
+<ul>
+<li>Works even with “dumb” servers (nginx, CloudFront) as the endpoint can be a generated JSON file on disk. If you can generate files, you can generate a JSON endpoint.</li>
+<li>Requires an additional request to fetch the configuration, and logic for injecting config data into all the relevant configurable places in the code.<ul>
+<li>This request can't happen until all the app code has loaded.</li>
+<li>It's very tempting to write the config to a global. This produces some hilarious race conditions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cookies">Cookies<a class="headerlink" href="#cookies" title="Permanent link">&para;</a></h3>
+<p>See for example <a href="https://github.com/henrikjoreteg/clientconfig">clientconfig</a>:</p>
+<pre><code class="js">var config = require('clientconfig');
+</code></pre>
+
+<ul>
+<li>Easy to consume given the right tools; tricky to do right from scratch.</li>
+<li>Requires server-side support to send the correct cookie. Some servers will allow you to generate the right cookie once and store it in a config file; others will need custom logic, which means (effectively) you need an app server.</li>
+<li>Cookies persist and get re-sent on subsequent requests, even if the server stops delivering config cookies. Client code has to manage the cookie lifecycle carefully (clientconfig does this automatically)</li>
+<li>Size limits constrain how much configuration you can do.</li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>A Users, Roles & Privileges Scheme Using Graphs - The Grimoire</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Grimoire</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Owen Jacobson</a>
+                            </li>
+                            <li >
+                                <a href="../">Code</a>
+                            </li>
+                            <li >
+                                <a href="../../nomic/">Nomic</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/grimoire-ca/bliki/edit/master/docs/code/users-rolegraph-privs.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#a-users-roles-privileges-scheme-using-graphs">A Users, Roles &amp; Privileges Scheme Using Graphs</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="a-users-roles-privileges-scheme-using-graphs">A Users, Roles &amp; Privileges Scheme Using Graphs<a class="headerlink" href="#a-users-roles-privileges-scheme-using-graphs" title="Permanent link">&para;</a></h1>
+<p>The basic elements:</p>
+<ul>
+<li>Every agent that can interact with a system is represented by a <strong>user</strong>.</li>
+<li>Every capability the system has is authorized by a distinct <strong>privilege</strong>.</li>
+<li>Each user has a list of zero or more <strong>roles</strong>.<ul>
+<li>Roles can <strong>imply</strong> further roles. This relationship is transitive: if role A implies role B, then a member of role A is a member of role B; if role B also implies role C, then a member of role A is also a member of role C. It helps if the resulting role graph is acyclic, but it's not necessary.</li>
+<li>Roles can <strong>grant</strong> privileges.</li>
+</ul>
+</li>
+</ul>
+<p>A user's privileges are the union of the privileges granted by the transitive closure of their roles.</p>
+<pre><code class="sql">create table &quot;user&quot; (
+    username varchar
+        primary key
+    -- credentials &amp;c
+);
+
+create table role (
+    name varchar
+        primary key
+);
+
+create table role_member (
+    role varchar
+        not null
+        references role,
+    member varchar
+        not null
+        references &quot;user&quot;,
+    primary key (role, member)
+);
+
+create table role_implies (
+    role varchar
+        not null
+        references role,
+    implied_role varchar
+        not null
+);
+
+create table privilege (
+    privilege varchar
+        primary key
+);
+
+create table role_grants (
+    role varchar
+        not null
+        references role,
+    privilege varchar
+        not null
+        references privilege,
+    primary key (role, privilege)
+);
+</code></pre>
+
+<p>If your database supports recursive CTEs, this schema can be queried in one shot, since we can have the database do all the graph-walking along roles:</p>
+<pre><code class="sql">with recursive user_roles (role) AS (
+    select
+        role
+    from
+        role_member
+    where
+        member = 'SOME USERNAME'
+    union
+    select
+        implied_role as role
+    from
+        user_roles
+        join role_implies on
+            user_roles.role = role_implies.role
+)
+select distinct
+    role_grants.privilege as privilege
+from
+    user_roles
+    join role_grants on
+        user_roles.role = role_grants.role
+order by privilege;
+</code></pre>
+
+<p>If not, you'll need to pull the entire graph into memory and manipulate it there: this schema doesn't give you any easy handles to identify only the roles transitively included in the role of interest, and repeatedly querying for each step of the graph requires an IO roundtrip at each step, burning whole milliseconds along the way.</p>
+<p>Realistic use cases should have fairly simple graphs: elemental privileges are grouped into concrete roles, which are in turn grouped into abstracted roles (by department, for example), which are in turn granted to users. If the average user is in tens of roles and has hundreds of privileges, the entire dataset fits in memory, and PostgreSQL performs well. In PostgreSQL, the above schema handles ~10k privileges and ~10k roles with randomly-generated graph relationships in around 100ms on my laptop, which is pretty slow but not intolerable. Perverse cases (interconnected total subgraphs, deeply-nested linear graphs) can take absurd time but do not reflect any likely permissions scheme.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
