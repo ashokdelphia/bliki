@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Notes Towards Initial Rules for a Github Nomic - The Grimoire</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Grimoire</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Owen Jacobson</a>
+                            </li>
+                            <li >
+                                <a href="../../code/">Code</a>
+                            </li>
+                            <li >
+                                <a href="../">Nomic</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/grimoire-ca/bliki/edit/master/docs/nomic/notes.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#notes-towards-initial-rules-for-a-github-nomic">Notes Towards Initial Rules for a Github Nomic</a></li>
+        <li class="main "><a href="#changes-from-subers-rules">Changes from Suber's Rules</a></li>
+            <li><a href="#format">Format</a></li>
+            <li><a href="#asynchrony">Asynchrony</a></li>
+            <li><a href="#rule-numbering">Rule-numbering</a></li>
+            <li><a href="#projects-ideas">Projects &amp; Ideas</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="notes-towards-initial-rules-for-a-github-nomic">Notes Towards Initial Rules for a Github Nomic<a class="headerlink" href="#notes-towards-initial-rules-for-a-github-nomic" title="Permanent link">&para;</a></h1>
+<p>This document is not part of the rules of a Nomic, and is present solely as a guide to the design of <a href="../rules/">this initial ruleset</a>, for play on Github. It should be removed before the game starts, and at no time should it be consulted to guide gameplay directly.</p>
+<p>Peter Suber's <a href="http://legacy.earlham.edu/~peters/writing/nomic.htm">Nomic</a> is a game of rule-making for one or more players. For details on the rationale behind the game and the reasons the game might be interesting, see Suber's own description.</p>
+<h1 id="changes-from-subers-rules">Changes from Suber's Rules<a class="headerlink" href="#changes-from-subers-rules" title="Permanent link">&para;</a></h1>
+<h2 id="format">Format<a class="headerlink" href="#format" title="Permanent link">&para;</a></h2>
+<p>I've marked up Suber's rules into Markdown, one of Github's “native” text markup formats. This highly-structured format produces quite readable results when viewed through the Github website, and allows useful things like HTML links that point to specific rules.</p>
+<p>I've also made some diff-friendliness choices around the structure of those Markdown documents. For want of a better idea, the source documents are line-broken with one sentence per line, so that diffs naturally span whole sentences rather than arbitrarily-wrapped text (or unwrapped text). Since Github automatically recombines sequences of non-blank lines into a single HTML paragraph, the rendering on the web site is still quite readable.</p>
+<p>I have not codified this format in the rules themselves.</p>
+<h2 id="asynchrony">Asynchrony<a class="headerlink" href="#asynchrony" title="Permanent link">&para;</a></h2>
+<p>In its original form, Nomic is appropriate for face-to-face play. The rules assume that it is practical for the players to identify one another using out-of-game context, and that it is practical for the players to take turns. Each player is expected to wait indefinitely (or, more likely, to apply non-game social pressure) if the preceding player takes inordinately long to complete their turn. Similarly, Judgement interrupts the flow of game play and brings turns to a stop.</p>
+<p>This Nomic is to be played on Github, and the players are <em>not</em> likely to be present simultaneously, or to be willing to wait indefinitely.</p>
+<p>It's possible for Suber's original Nomic rules to be amended, following themselves, into a form suitable for asynchronous play. This has happened several times: for examples, see <a href="http://agoranomic.org/">Agora</a> and <a href="http://blognomic.com/">BlogNomic</a>, though there are a multitude of others. However, this process of amendment takes <em>time</em>, and, starting from Suber's initial rules, would require a period of one-turn-at-a-time rule-changes before the game could be played more naturally in the Github format. This period is not very interesting, and is incredibly demanding of the initial players' attention spans.</p>
+<p>In the interests of preserving the players' time, I have modified Suber's initial ruleset to replace sequential play with a simple asynchronous model of play. In summary:</p>
+<ul>
+<li>Every player can begin a turn at any time, even during another player's (or players') turn, so long as they aren't already taking a turn.</li>
+<li>Actions can be resolved in any order, depending on which proposals players choose to vote on, and in what order.</li>
+<li>The initial rules allow for players to end their turns without gathering every vote, once gameplay has proceeded far enough for non-unanimous votes to be possible.</li>
+</ul>
+<p>I have attempted to leave the rules as close to Suber's original rules as possible otherwise while implementing this change to the initial ruleset. I have faith that the process of playing Nomic will correct any deficiencies, or, failing that, will clearly identify where these changes break the game entirely.</p>
+<p>I have, as far as I am able, emulated Suber's preference for succinctness over thoroughness, and resisted the urge to fix or clarify rules even where defects seem obvious to me. In spite of my temptation to remove it, I have even left the notion of “winning” intact.</p>
+<h2 id="rule-numbering">Rule-numbering<a class="headerlink" href="#rule-numbering" title="Permanent link">&para;</a></h2>
+<p>The intent of this Nomic is to explore the suitability of Github's suite of tools for proposing, reviewing, and accepting changes to a corpus of text are suitable for self-governed rulemaking processes, as modelled by Nomic. Note that this is a test of Github, not of Git: it is appropriate and intended that the players rely on non-Git elements of Github's workflow (issues, wiki pages, Github Pages, and so on), and similarly it is appropriate and intended that the authentic copy of the game in play is the Github project hosting it, not the Git repo the project contains, and certainly not forks of the project or other clones of the repository.</p>
+<p>To support this intention, I have re-labelled the initial rules with negative numbers, rather than digits, so that proposals can be numbered starting from 1 without colliding with existing rules, and so that they can be numbered by their Pull Requests and Github issue numbers. (A previous version of these rules used Roman numerals for the initial rules. However, correctly accounting for the priority of new rules over initial rules, following Suber, required more changes than I was comfortable making to Suber's ruleset.) I have made it explicit in these initial rules that Github, not the players, assigns numbers to proposals. This is the only rule which mentions Github by name. I have not explicitly specified that the proposals should be implemented through pull requests; this is an intentional opportunity for player creativity.</p>
+<h2 id="projects-ideas">Projects &amp; Ideas<a class="headerlink" href="#projects-ideas" title="Permanent link">&para;</a></h2>
+<p>A small personal collection of other ideas to explore:</p>
+<h3 id="repeal-or-replace-the-victory-criteria-entirely">Repeal or replace the victory criteria entirely<a class="headerlink" href="#repeal-or-replace-the-victory-criteria-entirely" title="Permanent link">&para;</a></h3>
+<p>“Winning” is not an objective I'm personally interested in, and Suber's race to 200 points by popularity of proposal is structurally quite dull. If the game is to have a victory condition, it should be built from the ground up to meet the players' motivations, rather than being retrofitted onto the points-based system.</p>
+<h3 id="codify-the-use-of-git-commits-rather-than-prose-for-rules-changes">Codify the use of Git commits, rather than prose, for rules-changes<a class="headerlink" href="#codify-the-use-of-git-commits-rather-than-prose-for-rules-changes" title="Permanent link">&para;</a></h3>
+<p>This is unstated in this ruleset, despite being part of my intention for playing. So is the relationship between proposals and the Git repository underpinning the Github project hosting the game.</p>
+<h3 id="clarify-the-immigration-and-exit-procedures">Clarify the immigration and exit procedures<a class="headerlink" href="#clarify-the-immigration-and-exit-procedures" title="Permanent link">&para;</a></h3>
+<p>The question of who the players <em>are</em>, or how one becomes a player, is left intentionally vague. In Suber's original rules, it appears that the players are those who are engaged in playing the game: tautological on paper, but inherently obvious by simple observation of the playing-space.</p>
+<p>On Github, the answer to this question may not be so simple. A public repository is <em>visible</em> to anyone with an internet connection, and will accept <em>proposed</em> pull requests (and issue reports) equally freely. This suggests that either everyone is, inherently, a player, or that player-ness is somehow a function of engaging with the game. I leave it to the players to resolve this situation to their own satisfaction, but my suggestion is to track player-ness using repository collaborators or organization member accounts.</p>
+<h3 id="figure-out-how-to-regulate-the-use-of-github-features">Figure out how to regulate the use of Github features<a class="headerlink" href="#figure-out-how-to-regulate-the-use-of-github-features" title="Permanent link">&para;</a></h3>
+<p>Nomic, as written, largely revolves around sequential proposals. That's fine as far as it goes, but Github has a very wide array of project management features - and that set of features changes over time, outside the control of the players, as Github roll out improvements (and, sometimes, break things).</p>
+<p>Features of probable interest:</p>
+<ul>
+<li>The <code>gh-pages</code> branch and associated web site.</li>
+<li>Issue and pull request tagging and approval settings.</li>
+<li>Third-party integrations.</li>
+<li>Whether to store non-rule state, as such arises, in the repository, or in the wiki, or elsewhere.</li>
+<li>Pull request reactions and approvals.</li>
+<li>The mutability of most Github features.</li>
+</ul>
+<h3 id="expand-the-rules-change-process-to-permit-a-single-proposal-to-amend-many-rules">Expand the rules-change process to permit a single proposal to amend many rules<a class="headerlink" href="#expand-the-rules-change-process-to-permit-a-single-proposal-to-amend-many-rules" title="Permanent link">&para;</a></h3>
+<p>This is a standard rules patch, as Suber's initial rule-set is (I believe intentionally) very restrictive.</p>
+<p>This may turn out to be less relevant on Github, if players are allowed to submit turns in rapid succession with themselves.</p>
+<h3 id="transition-from-immediate-amendment-to-a-system-of-sessions">Transition from immediate amendment to a system of sessions<a class="headerlink" href="#transition-from-immediate-amendment-to-a-system-of-sessions" title="Permanent link">&para;</a></h3>
+<p>Why not? Parliamentary procedure is fun, right?</p>
+<p>In an asynchronous environment, the discrete phases of a session system (where proposals are gathered, then debated, then voted upon, then enacted as a unit) might be a better fit for the Github mode of play.</p>
+<h3 id="evaluate-other-models-of-proposal-vetting-besides-majority-vote">Evaluate other models of proposal vetting besides majority vote<a class="headerlink" href="#evaluate-other-models-of-proposal-vetting-besides-majority-vote" title="Permanent link">&para;</a></h3>
+<p>Github open source projects regularly have a small core team of maintainers supporting a larger group of users. Is it possible to mirror this structure in Nomic? Is it wise to do so?</p>
+<p>I suspect this is only possible with an inordinately large number of players, but Github could, at least in principle, support that number of players.</p>
+<p>Note that this is a fairly standard Nomic passtime.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
