@@ -10,3 +10,4 @@ repo_url: https://github.com/grimoire-ca/bliki/
 markdown_extensions:
     - toc:
         permalink: true
+    - admonition
