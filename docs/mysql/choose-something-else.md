@@ -1,5 +1,14 @@
 # Do Not Pass This Way Again
 
+!!! warning
+    I wrote this article in 2013, in what amounts to a fit of pique, and never
+    revisited it. Much of this information is outdated, and you rely on it at
+    your own risk. I restored it at the request of [a reader](https://github.com/grimoire-ca/bliki/pull/2).
+
+    The tone and structure of this article also reflects an angrier and much
+    less understanding person than the one I try to be today. Don't let my
+    anger be your cudgel.
+
 Considering MySQL? Use something else. Already on MySQL? Migrate. For every
 successful project built on MySQL, you could uncover a history of time wasted
 mitigating MySQL's inadequacies, masked by a hard-won, but meaningless, sense
