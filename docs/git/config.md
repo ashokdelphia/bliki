@@ -19,4 +19,4 @@ Full documentation is under `git help config`, unless otherwise stated.
 A few things are nice when you're getting started, but become annoying when
 you no longer need them.
 
-* `git config advice.detachedHead` - if you already understand the difference between having a branch checked out and having a commit checked out, and already understand what “detatched head” means, the warning on every `git checkout ...some detatched thing...` isn't helping anyone. This is also useful repositories used for deployment, where specific commits (from tags, for example) are regularly checked out.
+* `git config advice.detachedHead` - if you already understand the difference between having a branch checked out and having a commit checked out, and already understand what “detached head” means, the warning on every `git checkout ...some detached thing...` isn't helping anyone. This is also useful repositories used for deployment, where specific commits (from tags, for example) are regularly checked out.
